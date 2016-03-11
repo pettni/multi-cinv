@@ -8,7 +8,7 @@ mptopt('lpsolver', 'gurobi');
 
 % define constants
 con = constants;
-dt = 0.2;
+dt = 0.1;
 
 syms v p1 p2;
 f = [1/v, v];
@@ -77,13 +77,14 @@ B_vertices_discrete = cellfun(@(B) dt*B,          B_vertices, 'UniformOutput', 0
 
 % define safe sets
 ymax = 0.9;
-vmax = 1;
-psimax = 1;
-rmax = 1;
+vmax = 1.2;
+psimax = 0.05;
+rmax = 0.3;
+rdmax = pi*2/180;
 
 C0 = Polyhedron('A', [eye(4); [-1 0 0 0; 0 -1 0 0; 0 0 -1 0; 0 0 0 -1]], ...
 			   'b', [ymax; vmax; psimax; rmax; ymax; vmax; psimax; vmax]);
-XUset = Polyhedron('H', [-K 1 pi/3; K -1 pi/3]);
+XUset = Polyhedron('H', [-K 1 rdmax; K -1 rdmax]);
 
 C = C0;
 iter = 0;
@@ -97,5 +98,3 @@ while not (C <= multi_pre(C, A_vertices_discrete, B_vertices_discrete, XUset, 0.
   disp(sprintf('\n'))
   disp(['iteration ', num2str(iter), ', ', num2str(size(C.A,1)), ' inequalities'])
 end
-
-plot(projection(C, [1 3 4]))

@@ -1,0 +1,21 @@
+% Plot results of Simulink experiments
+
+figure(1)
+subplot(311)
+plot(x_acc.Time, x_acc.Data(:,1))
+subplot(312)
+plot(x_acc.Time, x_acc.Data(:,2))
+subplot(313)
+plot(u_acc.Time, u_acc.Data(:,1))
+
+figure(2)
+subplot(511)
+plot(x_lk.Time, x_lk.Data(:,1))
+subplot(512)
+plot(x_lk.Time, x_lk.Data(:,2))
+subplot(513)
+plot(x_lk.Time, x_lk.Data(:,3))
+subplot(514)
+plot(x_lk.Time, x_lk.Data(:,4))
+subplot(514)
+plot(u_lk.Time, u_lk.Data(:,4))

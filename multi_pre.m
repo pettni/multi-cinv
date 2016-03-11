@@ -3,7 +3,7 @@ function [C_pre] = multi_pre(C, A, B, XUset, epsilon)
 
 	%  For (A_i, B_i), find a set C_pre s.t.
 	%  for all x \in C_pre, there exists a u s.t. (x,u) \in XUset
-	%  s.t. A_i x + B_i u \in C.
+	%  s.t. A_i x + B_i u \in C - epsilon.
 
 	if nargin < 5
 		epsilon = 0;
@@ -25,6 +25,6 @@ function [C_pre] = multi_pre(C, A, B, XUset, epsilon)
 
 	myMinHRep(pre_proj);
 
-	C_pre = projection(pre_proj, 1:n);
+	C_pre = projection(pre_proj, 1:n, 'ifourier');
 
 	myMinHRep(C_pre);
