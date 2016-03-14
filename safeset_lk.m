@@ -82,8 +82,8 @@ psimax = 0.05;
 rmax = 0.3;
 rdmax = pi*2/180;
 
-C0 = Polyhedron('A', [eye(4); [-1 0 0 0; 0 -1 0 0; 0 0 -1 0; 0 0 0 -1]], ...
-			   'b', [ymax; vmax; psimax; rmax; ymax; vmax; psimax; vmax]);
+C0 = Polyhedron('A', [eye(4); -eye(4)], ...
+			   'b', [ymax; vmax; psimax; rmax; ymax; vmax; psimax; rmax]);
 XUset = Polyhedron('H', [-K 1 rdmax; K -1 rdmax]);
 
 C = C0;
@@ -98,3 +98,5 @@ while not (C <= multi_pre_diffu(C, A_vertices_discrete, B_vertices_discrete, XUs
   disp(sprintf('\n'))
   disp(['iteration ', num2str(iter), ', ', num2str(size(C.A,1)), ' inequalities'])
 end
+
+save('safeset_lk.mat', 'C', 'con', 'func_poly')
