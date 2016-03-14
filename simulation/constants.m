@@ -4,8 +4,8 @@ function con = constants
     con.m = 1650 ; %kg
 
     % ACC parameters
-    con.f0bar = -189;
-    con.f1bar = 383;
+    con.f0bar = -24;
+    con.f1bar = 19;
 
     % LK parameters
     con.Iz = 2315; % kgm^2
@@ -14,24 +14,29 @@ function con = constants
 	con.Caf = 1.33e5; % N/rad 
     con.Car = 9.88e4; % N/rad
     
+    % control bounds
+    con.df_max = pi*2/180;
+    con.fw_max = 2*con.m;
+    con.fw_min = -3*con.m;
+
     % sampling time
     con.dt = 0.1;
     
-    A =   [ 1.0000         0;
-           -1.0000         0;
-                 0   -1.0000;
-            0.1960   -0.9806;
-            0.0995   -0.9950;
-            0.2870   -0.9579;
-            0.3708   -0.9287;
-            0.4464   -0.8948;
-            0.5134   -0.8581;
-            0.5721   -0.8202];
-    
-  b = [];
-  
-  con.acc_data = Polyhedron(A,b);
-  
-  con.lk_data = load('lk_invariant');
-  
+ 
+    % For the LK simulation
+    con.lk_data = load('safeset_lk');
+    con.lk_init = [0.3 -0.5 0 0.2]';
+
+    if ~con.lk_data.C.contains(con.lk_init)
+    error('LK: initial point not in C')
+    end
+
+    % For the ACC simulation
+    % con.acc_data = load('safeset_acc');
+    con.acc_init = [29 50]';
+
+    % if ~con.lk_data.C.contains(con.lk_init)
+    % error('LK: initial point not in C')
+    % end
+
 end

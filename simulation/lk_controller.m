@@ -39,7 +39,8 @@ function setup(block)
 %endfunction
 
 function InitConditions(block)
-
+  global con;
+  block.OutputPort(1).Data = con.lk_data.K*con.lk_init;
 %endfunction
 
 function Output(block)
@@ -48,6 +49,12 @@ function Output(block)
   x_lk = block.InputPort(1).Data;
   x_acc = block.InputPort(2).Data;
   
+  if ~con.lk_data.C.contains(x_lk)
+    % We fell out of C, hopefully due to being in between sample times
+    disp('warning: LK out of C')
+    return
+  end
+
   % get speed from acc state
   v = x_acc(1);
   
@@ -62,35 +69,43 @@ function Output(block)
   B = [0;con.Caf/con.m; 0; con.a*con.Caf/con.Iz];
   E = [0;0;1;0];
   K = [0;0;0;0];
-  
+
   A = A*con.dt + eye(4);
   B = B*con.dt;
   E = E*con.dt;
   K = K*con.dt;
   
+  if 1 % do some checks
+    AV_cell = cellfun(@vec, con.lk_data.A_vertices_discrete, 'UniformOutput', false);
+    A_poly = Polyhedron('V', [AV_cell{:}]');
+    assert(A_poly.contains(vec(A)));
+  end
+
   % assume no disturbance
   XD_plus = 0;
   XD_minus = 0;
   
-  R_x = eye(4);
-  r_x = [1; 1; 1; 1;];
+  R_x = diag([1 0 0 0]);
+  r_x = [0; 0; 0; 0;];
   R_u = 1;
-  r_u = 1;
+  r_u = 0;
 
   H_x = con.lk_data.C.A;
   h_x = con.lk_data.C.b;
 
   H = B'*R_x*B + R_u;
   f = r_u + B'*R_x*(A*x_lk + K) + B'*r_x;
-  A_quad = [H_x*B; H_x*B];
-  b_quad = [h_x - H_x*A*x_lk - H_x*E*XD_plus; h_x - H_x*A*x_lk - H_x*E*XD_minus];
+  A_constr = [H_x*B; H_x*B; 1; -1];
+  b_constr = [h_x - H_x*A*x_lk - H_x*E*XD_plus; 
+            h_x - H_x*A*x_lk - H_x*E*XD_minus;
+            con.df_max;
+            con.df_max];
 
-  u = quadprog(H, f, A_quad, b_quad);
-  
-  if(size(u) == 0)
-      u = -0.1*(x_lk(1));
-  end
-  
+  [u, ~, flag] = quadprog(H, f, A_constr, b_constr);
+
+  % Assert feasible
+  assert(flag == 1)
+
   block.OutputPort(1).Data = u;
   
 %endfunction

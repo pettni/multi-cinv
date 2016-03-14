@@ -46,8 +46,10 @@ function setup(block)
 %endfunction
 
 function InitConditions(block)
-  block.ContStates.Data = [27 60]'; % initial condition
-
+  global con
+  block.ContStates.Data = con.acc_init; % initial condition
+  block.OutputPort(1).Data = con.acc_init;
+  
 %endfunction
 
 function Output(block)

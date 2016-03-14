@@ -46,7 +46,8 @@ function setup(block)
 %endfunction
 
 function InitConditions(block)
-  block.ContStates.Data = [0.4 0 0 0]'; % initial condition
+  global con
+  block.ContStates.Data = con.lk_init; % initial condition
 
 %endfunction
 

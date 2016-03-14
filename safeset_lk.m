@@ -64,7 +64,8 @@ end
 %%%%%%%%%%%% Stabilize and discretize  %%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-K = joint_stab(A_vertices, B, sanity_check);
+% K = joint_stab(A_vertices, B, sanity_check);
+K = zeros(1,4)
 
 A_vertices_stable = cellfun(@(A) A-B*K, A_vertices, 'UniformOutput', 0);
 
@@ -99,4 +100,4 @@ while not (C <= multi_pre_diffu(C, A_vertices_discrete, B_vertices_discrete, XUs
   disp(['iteration ', num2str(iter), ', ', num2str(size(C.A,1)), ' inequalities'])
 end
 
-save('safeset_lk.mat', 'C', 'con', 'func_poly')
+save('simulation/safeset_lk.mat', 'C', 'con', 'func_poly', 'K', 'A_vertices_discrete')
