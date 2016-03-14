@@ -4,8 +4,8 @@ function con = constants
     con.m = 1650 ; %kg
 
     % ACC parameters
-    con.f0bar = -189;
-    con.f1bar = 383;
+    con.f0bar = -24;
+    con.f1bar = 19;
 
     % LK parameters
     con.Iz = 2315; % kgm^2
