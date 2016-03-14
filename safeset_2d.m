@@ -54,8 +54,8 @@ XUset = Polyhedron('H', [0 0 1 umax; 0 0 -1 umax]);
 C = Polyhedron('A', [eye(2); -eye(2)], 'b', ones(4,1));
 
 iter = 0;
-while not (C <= multi_pre(C, A_vertices, B_vertices, XUset, 0.0))
-  C = intersect(C, multi_pre(C, A_vertices, B_vertices, XUset, 0.02));
+while not (C <= multi_pre_diffu(C, A_vertices, B_vertices, XUset, 0.0))
+  C = intersect(C, multi_pre_diffu(C, A_vertices, B_vertices, XUset, 0.02));
   iter = iter+1;
   disp(['iteration ', num2str(iter), ', ', num2str(size(C.A,1)), ' inequalities'])
 end

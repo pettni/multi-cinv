@@ -2,8 +2,8 @@
 function [C_pre] = multi_pre(C, A, B, XUset, epsilon)
 
 	%  For (A_i, B_i), find a set C_pre s.t.
-	%  for all x \in C_pre, there exists a u s.t. (x,u) \in XUset
-	%  s.t. A_i x + B_i u \in C - epsilon.
+	%  exists u in U s.t. for all x \in C_pre, (x,u) \in XUset and
+	%  A_i x + B_i u \in C - epsilon.
 
 	if nargin < 5
 		epsilon = 0;

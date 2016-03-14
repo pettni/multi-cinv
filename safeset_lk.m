@@ -88,8 +88,8 @@ XUset = Polyhedron('H', [-K 1 rdmax; K -1 rdmax]);
 
 C = C0;
 iter = 0;
-while not (C <= multi_pre(C, A_vertices_discrete, B_vertices_discrete, XUset, 0.0))
-  Cpre = multi_pre(C, A_vertices_discrete, B_vertices_discrete, XUset, 0.02);
+while not (C <= multi_pre_diffu(C, A_vertices_discrete, B_vertices_discrete, XUset, 0.0))
+  Cpre = multi_pre_diffu(C, A_vertices_discrete, B_vertices_discrete, XUset, 0.02);
   C = Polyhedron('H', [Cpre.H; C0.H]); % intersect
 
   myMinHRep(C, size(Cpre.H,1)+1);
