@@ -60,7 +60,7 @@ function Output(block)
 function Derivative(block)
   global con;
 
-  vl = 27.5;
+  vl = 26;
 
   u = block.InputPort(1).Data;
   d = block.InputPort(2).Data;

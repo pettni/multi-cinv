@@ -1,11 +1,13 @@
 % Plot the safe set
 
+con = constants;
+
 multiplier = 1.1;
 
-ymax = multiplier*0.9;
-numax = multiplier*1.2;
-psimax = multiplier*0.05;
-rmax = multiplier*0.3;
+ymax = multiplier*con.y_max;
+numax = multiplier*con.nu_max;
+psimax = multiplier*con.psi_max;
+rmax = multiplier*con.r_max;
 
 data = load('safeset_lk.mat');
 figure(1); clf; 

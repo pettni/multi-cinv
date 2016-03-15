@@ -38,12 +38,8 @@ function setup(block)
   
 %endfunction
 
-function InitConditions(block)
-  global con
-
-  % block.OutputPort(1).Data = con.f0bar+con.f1bar*27;
-  
-  block.OutputPort(1).Data = con.f0bar+con.f1bar*27;
+function InitConditions(block) 
+  block.OutputPort(1).Data = 0;
   
 %endfunction
 
@@ -58,7 +54,7 @@ function Output(block)
   end
   
   % assume fixed lead car speed
-  vl = 27.5;
+  vl = 26;
   
   A = [-con.f1bar/con.m 0; -1 0];
   B = [1/con.m; 0];
@@ -95,14 +91,17 @@ function Output(block)
 
   A_constr = [H_x*B; H_x*B; 1; -1];
   b_constr = [h_x - H_x*A*x_acc - H_x*K - H_x*E*XD_plus;
-                h_x - H_x*A*x_acc - H_x*K - H_x*E*XD_minus;
-                con.fw_max;
-                -con.fw_min];
+              h_x - H_x*A*x_acc - H_x*K - H_x*E*XD_minus;
+              con.Fw_max;
+              -con.Fw_min];
 
   [u, ~, flag] = quadprog(H, f, A_constr, b_constr);
   
   % Assert feasible
-  assert(flag == 1)
+  if flag ~= 1
+    disp(['warning: ACC quadprog finished with flag ' num2str(flag)])
+    return
+  end
   
   block.OutputPort(1).Data = u;
 
