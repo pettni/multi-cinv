@@ -32,7 +32,7 @@ function con = constants
     end
 
     % For the ACC simulation
-    % con.acc_data = load('safeset_acc');
+    con.acc_data = load('safeset_acc');
     con.acc_init = [29 50]';
 
     % if ~con.lk_data.C.contains(con.lk_init)
