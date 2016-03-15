@@ -83,18 +83,19 @@ function Output(block)
   g = 100;
   
   R_x = [g 0; 0 0]; % don't care to minimize headway
-  r_x = [-2*v_d*g; 0];
-  R_u = 1;
-  r_u = 1;
+  r_x = [-v_d*g; 0];
+  R_u = 0;
+  r_u = 0;
 
   H_x = con.acc_data.C.A;
   h_x = con.acc_data.C.b;
 
   H = B'*R_x*B + R_u;
-  f = r_u + B'*R_x*(A*x_acc + K - v_d) + B'*r_x;
+  f = r_u + B'*R_x*(A*x_acc+K) + B'*r_x;
+
   A_constr = [H_x*B; H_x*B; 1; -1];
-  b_constr = [h_x - H_x*A*x_acc - H_x*E*XD_plus;
-                h_x - H_x*A*x_acc - H_x*E*XD_minus;
+  b_constr = [h_x - H_x*A*x_acc - H_x*K - H_x*E*XD_plus;
+                h_x - H_x*A*x_acc - H_x*K - H_x*E*XD_minus;
                 con.fw_max;
                 -con.fw_min];
 

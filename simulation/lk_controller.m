@@ -78,7 +78,15 @@ function Output(block)
   if 1 % do some checks
     AV_cell = cellfun(@vec, con.lk_data.A_vertices_discrete, 'UniformOutput', false);
     A_poly = Polyhedron('V', [AV_cell{:}]');
-    assert(A_poly.contains(vec(A)));
+    testnum = max(A_poly.A*vec(A) - A_poly.b);
+    if testnum > 2e-5
+      testnum
+      con.lk_data.A_vertices_discrete{1}
+      con.lk_data.A_vertices_discrete{2}
+      con.lk_data.A_vertices_discrete{3}
+      con.lk_data.A_vertices_discrete{4}
+      assert(false);
+    end
   end
 
   % assume no disturbance
